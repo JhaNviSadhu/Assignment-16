@@ -2,6 +2,7 @@ import 'package:assignment_16/constant.dart';
 import 'package:assignment_16/model/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
@@ -15,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   UserModel? userModel;
+  bool isSorted = false;
   bool isSelected = false;
 
   Future<String> _loadAssets() async {
@@ -39,6 +41,11 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
   }
+
+//  sortingData(){
+//    var upString =_following?.name?.toLowerCase().toString();
+//    upString!.s;
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +117,8 @@ class _HomeState extends State<Home> {
                   child: Text(
                     userModel?.bio ?? "",
                     style: kfont,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
           isSelected
@@ -196,11 +205,35 @@ class _HomeState extends State<Home> {
             ),
           ),
           isSelected
-              ? Container(
-                  // color: Colors.red,
-                  height: MediaQuery.of(context).size.height / 2,
+              ? Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isSorted
+                            ? userModel?.userfollwer?.sort(
+                                (name2, name1) => (name1.name ?? '').compareTo(
+                                  (name2.name ?? ''),
+                                ),
+                              )
+                            : userModel?.userfollwer?.sort(
+                                (name1, name2) => (name1.name ?? '').compareTo(
+                                  (name2.name ?? ''),
+                                ),
+                              );
+
+                        isSorted = !isSorted;
+                      });
+                    },
+                    icon: const Icon(Icons.sort_by_alpha),
+                  ),
+                )
+              : SizedBox(height: 0),
+          isSelected
+              ? Expanded(
                   child: ListView.builder(
-                    padding: EdgeInsets.all(0),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(0),
                     itemCount: userModel?.userfollwer?.length,
                     itemBuilder: (context, index) {
                       return ListTile(

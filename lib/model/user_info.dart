@@ -52,6 +52,8 @@ class UserFollower {
         userName: userData['user_name'],
         userImg: userData['user_img']);
   }
+
+ 
 }
 
 class Following {
