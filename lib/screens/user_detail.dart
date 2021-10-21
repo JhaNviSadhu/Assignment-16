@@ -1,39 +1,31 @@
 import 'package:assignment_16/constant.dart';
-import 'package:assignment_16/model/user_info.dart';
+import 'package:assignment_16/model/user_api_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class ScreenArgument {
+  final UserInfoModel userInfo;
 
-  @override
-  State<Home> createState() => _HomeState();
+  ScreenArgument(this.userInfo);
 }
 
-class _HomeState extends State<Home> {
-  UserModel? userModel;
+class UserDetailScreen extends StatefulWidget {
+  final UserInfoModel? userInfo;
+  const UserDetailScreen({Key? key, this.userInfo}) : super(key: key);
+
+  @override
+  _UserDetailScreenState createState() => _UserDetailScreenState();
+}
+
+class _UserDetailScreenState extends State<UserDetailScreen> {
+  UserInfoModel? listUserinfo;
+
   bool isSorted = false;
   bool isSelected = false;
 
-  Future<String> _loadAssets() async {
-    return await rootBundle.loadString('assets/userinfo.json');
-  }
-
-  Future loadUserData() async {
-    String jsonString = await _loadAssets();
-    final jsonResponse = json.decode(jsonString);
-    setState(() {
-      userModel = UserModel.fromJson(jsonResponse);
-    });
-  }
-
   @override
   void initState() {
-    loadUserData();
+    listUserinfo = widget.userInfo;
     super.initState();
   }
 
@@ -42,13 +34,23 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-//  sortingData(){
-//    var upString =_following?.name?.toLowerCase().toString();
-//    upString!.s;
-//   }
-
   @override
   Widget build(BuildContext context) {
+    sortingData() {
+      isSorted
+          ? listUserinfo?.userFollwerapi?.sort(
+              (name1, name2) => (name1.userName ?? '').compareTo(
+                (name2.userName ?? ''),
+              ),
+            )
+          : listUserinfo?.userFollwerapi?.sort(
+              (name2, name1) => (name1.userName ?? '').compareTo(
+                (name2.userName ?? ''),
+              ),
+            );
+      isSorted = !isSorted;
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -66,10 +68,10 @@ class _HomeState extends State<Home> {
                   : MediaQuery.of(context).size.height / 1.6,
               width: MediaQuery.of(context).size.width,
               color: Theme.of(context).colorScheme.primary,
-              child: (userModel?.profilePic == null)
+              child: (listUserinfo?.profileImg == null)
                   ? const Placeholder()
                   : Image.network(
-                      userModel?.profilePic ?? '',
+                      listUserinfo?.profileImg ?? '',
                       scale: 1.0,
                       fit: BoxFit.cover,
                     ),
@@ -85,13 +87,13 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${userModel?.firstName} ${userModel?.lastName}"
+                      "${listUserinfo?.userFirstName} ${listUserinfo?.userLastName}"
                           .toUpperCase(),
                       style: kfont1,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "${userModel?.region} ,${userModel?.country}",
+                      "${listUserinfo?.region ?? ' '} ,${listUserinfo?.country ?? ' '}",
                       style: kfont,
                     ),
                   ],
@@ -115,7 +117,7 @@ class _HomeState extends State<Home> {
               : Padding(
                   padding: const EdgeInsets.only(top: 19, left: 30, right: 30),
                   child: Text(
-                    userModel?.bio ?? "",
+                    listUserinfo?.bio ?? '',
                     style: kfont,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -143,7 +145,7 @@ class _HomeState extends State<Home> {
                         Text("Posts", style: kfont.copyWith(fontSize: 10)),
                         const SizedBox(height: 5),
                         Text(
-                          "${userModel?.post?.length.toString()}",
+                          "3",
                           style: kfont1.copyWith(fontSize: 18),
                         ),
                         const Spacer(),
@@ -167,7 +169,7 @@ class _HomeState extends State<Home> {
                                   style: kfont.copyWith(fontSize: 10)),
                               const SizedBox(height: 5),
                               Text(
-                                "${userModel?.userfollwer?.length}",
+                                "${listUserinfo?.userFollwerapi?.length ?? 0}",
                                 style: kfont1.copyWith(fontSize: 18),
                               ),
                               const Spacer(),
@@ -193,7 +195,7 @@ class _HomeState extends State<Home> {
                         Text("Following", style: kfont.copyWith(fontSize: 10)),
                         const SizedBox(height: 5),
                         Text(
-                          "${userModel?.following?.length}",
+                          "4",
                           style: kfont1.copyWith(fontSize: 18),
                         ),
                         const Spacer(),
@@ -210,60 +212,45 @@ class _HomeState extends State<Home> {
                   child: IconButton(
                     onPressed: () {
                       setState(() {
-                        isSorted
-                            ? userModel?.userfollwer?.sort(
-                                (name2, name1) => (name1.name ?? '').compareTo(
-                                  (name2.name ?? ''),
-                                ),
-                              )
-                            : userModel?.userfollwer?.sort(
-                                (name1, name2) => (name1.name ?? '').compareTo(
-                                  (name2.name ?? ''),
-                                ),
-                              );
-
-                        isSorted = !isSorted;
+                        sortingData();
+                        print(listUserinfo?.userFollwerapi?[0].userImg);
+                        print(listUserinfo?.userFollwerapi?[1].userImg);
                       });
                     },
                     icon: const Icon(Icons.sort_by_alpha),
                   ),
                 )
-              : SizedBox(height: 0),
+              : const SizedBox(height: 0),
           isSelected
               ? Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(0),
-                    itemCount: userModel?.userfollwer?.length,
+                    itemCount: 2,
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: CircleAvatar(
                           maxRadius: 45,
                           minRadius: 45,
-                          backgroundImage: AssetImage(
-                            userModel?.userfollwer?[index].userImg ?? " ",
+                          backgroundImage: NetworkImage(
+                            listUserinfo?.userFollwerapi?[index].userImg ?? '',
                           ),
                         ),
                         title: Text(
-                          userModel?.userfollwer?[index].name ?? '',
+                          "${listUserinfo?.userFollwerapi?[index].userfirstname ?? ''}${listUserinfo?.userFollwerapi?[index].userlastname ?? ''}",
                           style: kfont1.copyWith(fontSize: 20),
                         ),
                         subtitle: Text(
-                          userModel?.userfollwer?[index].userName ?? '',
+                          listUserinfo?.userFollwerapi?[index].userName ?? '',
                           style: kfont.copyWith(fontSize: 20),
                         ),
                       );
                     },
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );
   }
-
-  // Widget userFollowerInfo() {
-
-  //   return
-  // }
 }
