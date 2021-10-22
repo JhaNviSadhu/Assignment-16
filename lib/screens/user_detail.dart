@@ -1,49 +1,38 @@
 import 'package:assignment_16/constant.dart';
-import 'package:assignment_16/model/user_api_info.dart';
+import 'package:assignment_16/model/user_api_info_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ScreenArgument {
-  final UserInfoModel userInfo;
+  UserInfoModel? userInfo;
 
   ScreenArgument(this.userInfo);
 }
 
 class UserDetailScreen extends StatefulWidget {
-  final UserInfoModel? userInfo;
-  const UserDetailScreen({Key? key, this.userInfo}) : super(key: key);
-
+  const UserDetailScreen({
+    Key? key,
+  }) : super(key: key);
+  static const routeName = '/second';
   @override
   _UserDetailScreenState createState() => _UserDetailScreenState();
 }
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
-  UserInfoModel? listUserinfo;
-
   bool isSorted = false;
   bool isSelected = false;
 
   @override
-  void initState() {
-    listUserinfo = widget.userInfo;
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final arg = ModalRoute.of(context)!.settings.arguments as UserInfoModel;
     sortingData() {
       isSorted
-          ? listUserinfo?.userFollwerapi?.sort(
+          ? arg.userFollwerapi?.sort(
               (name1, name2) => (name1.userName ?? '').compareTo(
                 (name2.userName ?? ''),
               ),
             )
-          : listUserinfo?.userFollwerapi?.sort(
+          : arg.userFollwerapi?.sort(
               (name2, name1) => (name1.userName ?? '').compareTo(
                 (name2.userName ?? ''),
               ),
@@ -68,10 +57,10 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   : MediaQuery.of(context).size.height / 1.6,
               width: MediaQuery.of(context).size.width,
               color: Theme.of(context).colorScheme.primary,
-              child: (listUserinfo?.profileImg == null)
+              child: (arg.profileImg == null)
                   ? const Placeholder()
                   : Image.network(
-                      listUserinfo?.profileImg ?? '',
+                      arg.profileImg ?? '',
                       scale: 1.0,
                       fit: BoxFit.cover,
                     ),
@@ -87,13 +76,12 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${listUserinfo?.userFirstName} ${listUserinfo?.userLastName}"
-                          .toUpperCase(),
+                      "${arg.userFirstName} ${arg.userLastName}".toUpperCase(),
                       style: kfont1,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "${listUserinfo?.region ?? ' '} ,${listUserinfo?.country ?? ' '}",
+                      "${arg.region ?? ' '} ,${arg.country ?? ' '}",
                       style: kfont,
                     ),
                   ],
@@ -117,7 +105,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               : Padding(
                   padding: const EdgeInsets.only(top: 19, left: 30, right: 30),
                   child: Text(
-                    listUserinfo?.bio ?? '',
+                    arg.bio ?? '',
                     style: kfont,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -169,7 +157,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                   style: kfont.copyWith(fontSize: 10)),
                               const SizedBox(height: 5),
                               Text(
-                                "${listUserinfo?.userFollwerapi?.length ?? 0}",
+                                "${arg.userFollwerapi?.length ?? 0}",
                                 style: kfont1.copyWith(fontSize: 18),
                               ),
                               const Spacer(),
@@ -213,8 +201,6 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     onPressed: () {
                       setState(() {
                         sortingData();
-                        print(listUserinfo?.userFollwerapi?[0].userImg);
-                        print(listUserinfo?.userFollwerapi?[1].userImg);
                       });
                     },
                     icon: const Icon(Icons.sort_by_alpha),
@@ -230,18 +216,16 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: CircleAvatar(
-                          maxRadius: 45,
-                          minRadius: 45,
+                          radius: 25,
                           backgroundImage: NetworkImage(
-                            listUserinfo?.userFollwerapi?[index].userImg ?? '',
-                          ),
+                              arg.userFollwerapi?[index].userImg ?? ''),
                         ),
                         title: Text(
-                          "${listUserinfo?.userFollwerapi?[index].userfirstname ?? ''}${listUserinfo?.userFollwerapi?[index].userlastname ?? ''}",
+                          "${arg.userFollwerapi?[index].userfirstname ?? ''}${arg.userFollwerapi?[index].userlastname ?? ''}",
                           style: kfont1.copyWith(fontSize: 20),
                         ),
                         subtitle: Text(
-                          listUserinfo?.userFollwerapi?[index].userName ?? '',
+                          arg.userFollwerapi?[index].userName ?? '',
                           style: kfont.copyWith(fontSize: 20),
                         ),
                       );

@@ -18,9 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
+      // onGenerateRoute: ,
       routes: {
-        '/': (context) => const Home(),
-        '/second': (context) => const UserDetailScreen(),
+        Home.routeName: (context) => const Home(),
+        UserDetailScreen.routeName: (context) => const UserDetailScreen(),
       },
       // home: const Home(),
     );

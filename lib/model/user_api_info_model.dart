@@ -1,9 +1,9 @@
-class UserFullList {
-  UserFullList({this.userInfoModel});
+class UserFullListModel {
+  UserFullListModel({this.userInfoModel});
 
   List<UserInfoModel>? userInfoModel;
-  factory UserFullList.fromJson(dynamic json) {
-    return UserFullList(
+  factory UserFullListModel.fromJson(dynamic json) {
+    return UserFullListModel(
       userInfoModel:
           List<UserInfoModel>.from(json.map((x) => UserInfoModel.fromJson(x))),
     );
@@ -71,3 +71,5 @@ class UserFollwerApi {
     );
   }
 }
+
+

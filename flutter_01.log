@@ -1,0 +1,84 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run -d chrome --web-renderer html
+
+## exception
+
+DartDevelopmentServiceException: DartDevelopmentServiceException: JSON-RPC error 100: Feature is disabled.
+
+```
+#0      DartDevelopmentServiceImpl._startDDSServer (package:dds/src/dds_impl.dart:174:7)
+<asynchronous suspension>
+#1      DartDevelopmentServiceImpl.startService (package:dds/src/dds_impl.dart:111:7)
+<asynchronous suspension>
+#2      DartDevelopmentService.startDartDevelopmentService (package:dds/dds.dart:86:5)
+<asynchronous suspension>
+#3      DebugService.startDartDevelopmentService (package:dwds/src/services/debug_service.dart:151:12)
+<asynchronous suspension>
+#4      DevHandler._createAppDebugServices (package:dwds/src/handlers/dev_handler.dart:436:7)
+<asynchronous suspension>
+#5      DevHandler.loadAppServices (package:dwds/src/handlers/dev_handler.dart:225:25)
+<asynchronous suspension>
+#6      Dwds.debugConnection (package:dwds/dwds.dart:89:28)
+<asynchronous suspension>
+#7      WebDevFS.connect.<anonymous closure> (package:flutter_tools/src/isolated/devfs_web.dart:682:15)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 2.5.0, on macOS 11.6 20G165 darwin-arm,
+    locale en-IN)
+    • Flutter version 2.5.0 at
+      /Users/jhanvivaishnav/FlutterDev/flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 4cc385b4b8 (6 weeks ago), 2021-09-07 23:01:49
+      -0700
+    • Engine revision f0826da7ef
+    • Dart version 2.14.0
+
+[✓] Android toolchain - develop for Android devices (Android SDK
+    version 30.0.3)
+    • Android SDK at /Users/jhanvivaishnav/Library/Android/sdk
+    • Platform android-30, build-tools 30.0.3
+    • Java binary at: /Applications/Android
+      Studio.app/Contents/jre/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build
+      11.0.10+0-b96-7281165)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 13.0, Build version 13A233
+    • CocoaPods version 1.11.2
+
+[✓] Chrome - develop for the web
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google
+      Chrome
+
+[✓] Android Studio (version 2020.3)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build
+      11.0.10+0-b96-7281165)
+
+[✓] VS Code (version 1.61.2)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension version 3.27.0
+
+[✓] Connected device (2 available)
+    • iPhone 13 Pro Max (mobile) •
+      E33A86D4-BE0D-4E60-8AA6-2EF07FEB2DE3 • ios            •
+      com.apple.CoreSimulator.SimRuntime.iOS-15-0 (simulator)
+    • Chrome (web)               • chrome
+      • web-javascript • Google Chrome 95.0.4638.54
+
+• No issues found!
+```

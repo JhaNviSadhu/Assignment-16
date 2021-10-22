@@ -42,7 +42,7 @@ dependencies:
    
   #For Handale Image
   #https://pub.dev/packages/cached_network_image  
-  #cached_network_image: ^3.1.0
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_test:
